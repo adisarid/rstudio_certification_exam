@@ -20,7 +20,14 @@ iris %>%
   nest() %>% 
   mutate(lm = map(data, function(df) lm(data = df, Sepal.Length ~ .)))
 
-
+# Bonus - explain what this code does
+# then, using unnest and spread create a tibble with the species, and coefficients of the models
+iris %>% 
+  group_by(Species) %>%
+  nest() %>% 
+  mutate(lm = map(data, function(df) lm(data = df, Sepal.Length ~ .))) %>% 
+  mutate(coefficients = map(lm, ~{tibble(coef_name = names(.$coefficients), coef_value = .$coefficients)})) %>% 
+  select(1,4)
 
 # Question 2:
 # Using map, read all the files in file_list, and return their length (#rows and #columns).
